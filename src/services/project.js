@@ -33,9 +33,15 @@ const getProject = async (projectId, user) => {
     },
     { lookupOwner: true },
   );
-
+  const cameraIds = project.cameras;
+  let cameras = [];
+  for (let i = 0; i < cameraIds.length; i++) {
+    let cameraId = cameraIds[i];
+    const camera = await cameraDao.getCamera({ _id: cameraId });
+    cameras.push(camera);
+  }
+  project.cameras = cameras;
   if (!project) throw new CustomError(errorCodes.PROJECT_NOT_FOUND);
-
   return project;
 };
 
