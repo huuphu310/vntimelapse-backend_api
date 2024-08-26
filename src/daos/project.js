@@ -19,7 +19,16 @@ const getProjects = async (
 ) => {
   const match = parseCondition(condition);
 
-  const lookup = [];
+  const lookup = [
+    {
+      $lookup: {
+        from: 'cameras',
+        localField: 'cameraIds',
+        foreignField: '_id',
+        as: 'cameras',
+      },
+    },
+  ];
   if (lookupOwner) {
     lookup.push(...getLookup('users', 'ownerId', 'owner'));
   }
@@ -53,7 +62,16 @@ const createProject = async (data) => {
 };
 
 const getProject = async (condition, { lookupOwner = false } = {}) => {
-  const lookup = [];
+  const lookup = [
+    {
+      $lookup: {
+        from: 'cameras',
+        localField: 'cameraIds',
+        foreignField: '_id',
+        as: 'cameras',
+      },
+    },
+  ];
   if (lookupOwner) {
     lookup.push(...getLookup('users', 'ownerId', 'owner'));
   }

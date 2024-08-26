@@ -64,7 +64,9 @@ const updateProject = async (projectId, { ownerId, ...data }) => {
 
 const updateProjectCameras = async (projectId) => {
   const cameras = await cameraDao.getCameras({ projectId });
-  await projectDao.updateProject(projectId, { cameras });
+  await projectDao.updateProject(projectId, {
+    cameraIds: cameras.map((camera) => camera._id),
+  });
 };
 
 module.exports = {

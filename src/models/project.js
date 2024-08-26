@@ -7,7 +7,7 @@ const projectSchema = new mongoose.Schema(
     name: String,
     ownerId: { type: ObjectId, ref: 'User' },
     active: { type: Boolean, default: true },
-    cameras: [Object],
+    cameraIds: [{ type: ObjectId, ref: 'Camera' }],
     duration: Number,
     videosPerDay: Number,
   },
