@@ -50,8 +50,7 @@ const createProject = async ({ ownerId, ...data }) => {
   if (!owner)
     throw new CustomError(errorCodes.USER_NOT_FOUND, 'Owner is not found');
 
-  const project = await projectDao.createProject({ ...data, ownerId });
-  return project;
+  return await projectDao.createProject({...data, ownerId});
 };
 
 const updateProject = async (projectId, { ownerId, ...data }) => {
