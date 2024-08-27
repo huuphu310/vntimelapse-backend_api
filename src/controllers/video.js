@@ -5,4 +5,9 @@ const getVideos = async (req, res) => {
   return res.send({ status: 1, result });
 };
 
-module.exports = { getVideos };
+const createVideo = async (req, res) => {
+  const video = await videoService.createVideo(req.body, req.user);
+  return res.send({ status: 1, result: video });
+}
+
+module.exports = { getVideos, createVideo };

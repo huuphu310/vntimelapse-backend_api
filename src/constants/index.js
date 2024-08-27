@@ -6,8 +6,15 @@ const ROLE = {
   OWNER: 'OWNER',
 };
 
+const VIDEO_STATUS = {
+  PROCESSING: 'PROCESSING',
+  ERROR: 'ERROR',
+  DONE: 'DONE'
+}
+
 module.exports = {
   PAGE_NUMBER_DEFAULT,
   PAGE_SIZE_DEFAULT,
   ROLE,
+  VIDEO_STATUS,
 };

@@ -11,6 +11,15 @@ const getVideos = {
   }),
 };
 
+const createVideo = {
+  body: Joi.object({
+    cameraId: Joi.string().trim().required(),
+    startDate: Joi.date().required(),
+    endDate: Joi.date().required(),
+  }),
+};
+
 module.exports = {
   getVideosValidate: customValidate(getVideos),
+  createVideoValidate: customValidate(createVideo)
 };

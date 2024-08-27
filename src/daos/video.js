@@ -3,21 +3,20 @@ const {
   parseCondition,
   getSortQuery,
   getDateQuery,
+  createOne,
 } = require('../utils/database');
 const Video = require('../models/video');
 
 const getVideos = async ({
   limit,
   page = PAGE_NUMBER_DEFAULT,
-  sort = ['uploadTime_desc'],
+  sort = ['createdAt_desc'],
   startDate,
   endDate,
   ...condition
 }) => {
   const match = parseCondition(condition);
-  match.uploadTime = getDateQuery(startDate, endDate);
-
-  console.log('match', match);
+  match.createdAt = getDateQuery(startDate, endDate);
 
   let offset = 0;
   const limitQuery = [];
@@ -41,4 +40,16 @@ const getVideos = async ({
   return videos;
 };
 
-module.exports = { getVideos };
+const createVideo = async (data) => {
+  const project = await createOne(Video, data);
+  return project;
+};
+
+const countVideos = async ({ startDate, endDate, ...condition }) => {
+  const match = parseCondition(condition);
+  match.createdAt = getDateQuery(startDate, endDate);
+  const count = await Video.countDocuments(match);
+  return count;
+};
+
+module.exports = { getVideos, createVideo, countVideos };

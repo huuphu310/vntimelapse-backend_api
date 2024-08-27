@@ -5,7 +5,7 @@ const {
   createOne,
   getSortQuery,
   parseCondition,
-  findDocument,
+  getLookup,
 } = require('../utils/database');
 
 const createCamera = async (data) => {
@@ -13,9 +13,18 @@ const createCamera = async (data) => {
   return camera;
 };
 
-const getCamera = async (condition) => {
-  const camera = await findDocument(Camera, condition);
-  return camera;
+const getCamera = async (condition, { lookupProject = false } = {}) => {
+  const lookup = [];
+  if (lookupProject) {
+    lookup.push(...getLookup('projects', 'projectId', 'project'));
+  }
+
+  const projects = await Camera.aggregate([
+    { $match: parseCondition(condition) },
+    ...lookup,
+  ]);
+
+  return projects[0];
 };
 
 const updateCamera = async (condition, updateFields) => {
