@@ -7,7 +7,7 @@ const createCamera = {
     name: Joi.string().trim().required(),
     apiKey: Joi.string().trim().required(),
     apiSecret: Joi.string().trim().required(),
-    sshLink: Joi.string().trim().allow(null),
+    sshLink: Joi.string().trim().allow(''),
     captureTime: Joi.number().integer().min(1).required(),
     frameTime: Joi.object({
       startTime: Joi.string().trim().required(),
@@ -24,7 +24,7 @@ const updateCamera = {
     name: Joi.string().trim().required(),
     apiKey: Joi.string().trim().required(),
     apiSecret: Joi.string().trim().required(),
-    sshLink: Joi.string().trim().allow(null),
+    sshLink: Joi.string().trim().allow(''),
     captureTime: Joi.number().integer().min(1).required(),
     frameTime: Joi.object({
       startTime: Joi.string().trim().required(),
