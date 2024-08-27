@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const { ROLE } = require('../constants');
 const userDao = require('../daos/user');
 
@@ -17,7 +19,20 @@ const changeStatus = async (userId, active) => {
   await userDao.updateUser(userId, { active });
 };
 
+const changePassword = async (user, oldPassword, newPassword) => {
+  const isCorrectPassword = await bcrypt.compare(
+    oldPassword,
+    user.passwordHash,
+  );
+  if (!isCorrectPassword) throw new CustomError(errorCodes.PASSWORD_INVALID);
+
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+
+  await userDao.updateUser(user._id, { passwordHash });
+};
+
 module.exports = {
   getUsers,
   changeStatus,
+  changePassword,
 };

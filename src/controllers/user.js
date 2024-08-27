@@ -18,4 +18,10 @@ const changeStatus = async (req, res) => {
   return res.send({ status: 1 });
 };
 
-module.exports = { getMe, getUsers, changeStatus };
+const changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  await userService.changePassword(req.user, oldPassword, newPassword);
+  return res.send({ status: 1 });
+};
+
+module.exports = { getMe, getUsers, changeStatus, changePassword };

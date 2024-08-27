@@ -20,7 +20,15 @@ const changeStatus = {
   }),
 };
 
+const changePassword = {
+  body: Joi.object({
+    oldPassword: Joi.string().trim().required(),
+    newPassword: Joi.string().trim().required(),
+  }),
+};
+
 module.exports = {
   getUsersValidate: customValidate(getUsers),
   changeStatusValidate: customValidate(changeStatus),
+  changePasswordValidate: customValidate(changePassword),
 };
