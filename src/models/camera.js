@@ -14,7 +14,7 @@ const cameraSchema = new mongoose.Schema(
       startTime: String,
       endTime: String,
     },
-    shutterSpeed: Number,
+    captureTime: Number,
   },
   {
     timestamps: true,
