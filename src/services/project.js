@@ -36,7 +36,9 @@ const getProject = async (projectId, user) => {
 
   if (!project) throw new CustomError(errorCodes.PROJECT_NOT_FOUND);
 
-  return project;
+  const cameras = await cameraDao.getCameras({ projectId });
+
+  return { ...project, cameras };
 };
 
 const createProject = async ({ ownerId, ...data }) => {

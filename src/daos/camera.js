@@ -40,6 +40,30 @@ const getCameras = async ({
 
   const cameras = await Camera.aggregate([
     { $match: match },
+    {
+      $lookup: {
+        from: 'powers',
+        localField: '_id',
+        foreignField: 'cameraId',
+        pipeline: [{ $sort: { updated: -1 } }, { $limit: 1 }],
+        as: 'power',
+      },
+    },
+    {
+      $unwind: { path: '$power', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $lookup: {
+        from: 'temperatures',
+        localField: '_id',
+        foreignField: 'cameraId',
+        pipeline: [{ $sort: { updated: -1 } }, { $limit: 1 }],
+        as: 'temperature',
+      },
+    },
+    {
+      $unwind: { path: '$temperature', preserveNullAndEmptyArrays: true },
+    },
     { $sort: getSortQuery(sort) },
     { $skip: offset },
     ...limitQuery,

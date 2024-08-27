@@ -62,16 +62,7 @@ const createProject = async (data) => {
 };
 
 const getProject = async (condition, { lookupOwner = false } = {}) => {
-  const lookup = [
-    {
-      $lookup: {
-        from: 'cameras',
-        localField: 'cameraIds',
-        foreignField: '_id',
-        as: 'cameras',
-      },
-    },
-  ];
+  const lookup = [];
   if (lookupOwner) {
     lookup.push(...getLookup('users', 'ownerId', 'owner'));
   }
