@@ -25,6 +25,7 @@ const getProjects = async (
         from: 'cameras',
         localField: 'cameraIds',
         foreignField: '_id',
+        pipeline: [{ $sort: { createdAt: -1 } }],
         as: 'cameras',
       },
     },
