@@ -31,8 +31,51 @@ const changePassword = async (user, oldPassword, newPassword) => {
   await userDao.updateUser(user._id, { passwordHash });
 };
 
+const createUser = async ({ email, password, ...data }) => {
+  let user = await userDao.findUser({ email });
+  if (user) throw new CustomError(errorCodes.USER_EXIST);
+
+  const passwordHash = await bcrypt.hash(password, 12);
+
+  user = await userDao.createUser({
+    ...data,
+    email,
+    passwordHash,
+    role: ROLE.OWNER,
+  });
+
+  delete user.passwordHash;
+
+  return user;
+};
+
+const updateUser = async (userId, { email, password, ...data }) => {
+  let user = await userDao.findUser(userId);
+  if (!user) throw new CustomError(errorCodes.USER_NOT_FOUND);
+
+  if (email !== user.email) {
+    const userExist = await userDao.findUser({ email });
+    if (userExist) throw new CustomError(errorCodes.USER_EXIST);
+  }
+
+  let passwordHash;
+  if (password) passwordHash = await bcrypt.hash(password, 12);
+
+  user = await userDao.updateUser(userId, {
+    ...data,
+    email,
+    passwordHash,
+  });
+
+  delete user.passwordHash;
+
+  return user;
+};
+
 module.exports = {
   getUsers,
   changeStatus,
   changePassword,
+  createUser,
+  updateUser,
 };

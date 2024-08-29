@@ -9,7 +9,11 @@ const getErrorMessage = (code) => {
     case codes.CREDENTIAL_INVALID:
       return 'Credential is invalid';
     case codes.PASSWORD_INVALID:
-      return 'Password is invalid'
+      return 'Password is invalid';
+    case codes.USER_EXIST:
+      return 'User already exists';
+    case codes.EMAIL_EXIST:
+      return 'Email already exists';
     case codes.PROJECT_NOT_FOUND:
       return 'Project is not found';
     case codes.EXCEED_CREATE_VIDEO_PER_DAY:

@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema(
     active: { type: Boolean, default: true },
     role: { type: String, enum: Object.values(ROLE) },
     projectIds: [{ type: ObjectId, ref: 'Project' }],
-    setting: Object,
   },
   {
     timestamps: true,

@@ -24,4 +24,22 @@ const changePassword = async (req, res) => {
   return res.send({ status: 1 });
 };
 
-module.exports = { getMe, getUsers, changeStatus, changePassword };
+const createUser = async (req, res) => {
+  const user = await userService.createUser(req.body);
+  return res.send({ status: 1, result: user });
+};
+
+const updateUser = async (req, res) => {
+  const { userId } = req.params;
+  const user = await userService.updateUser(userId, req.body);
+  return res.send({ status: 1, result: user });
+};
+
+module.exports = {
+  getMe,
+  getUsers,
+  changeStatus,
+  changePassword,
+  createUser,
+  updateUser,
+};
