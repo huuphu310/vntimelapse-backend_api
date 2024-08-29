@@ -114,12 +114,13 @@ const getDateQuery = (startTime, endTime) => {
   return query;
 };
 
-const getLookup = (collection, key, path) => [
+const getLookup = (collection, key, path, pipeline = []) => [
   {
     $lookup: {
       from: collection,
       localField: key,
       foreignField: '_id',
+      pipeline,
       as: path,
     },
   },

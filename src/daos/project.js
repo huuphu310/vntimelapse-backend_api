@@ -31,7 +31,11 @@ const getProjects = async (
     },
   ];
   if (lookupOwner) {
-    lookup.push(...getLookup('users', 'ownerId', 'owner'));
+    lookup.push(
+      ...getLookup('users', 'ownerId', 'owner', [
+        { $project: { passwordHash: 0 } },
+      ]),
+    );
   }
 
   let offset = 0;
@@ -65,7 +69,11 @@ const createProject = async (data) => {
 const getProject = async (condition, { lookupOwner = false } = {}) => {
   const lookup = [];
   if (lookupOwner) {
-    lookup.push(...getLookup('users', 'ownerId', 'owner'));
+    lookup.push(
+      ...getLookup('users', 'ownerId', 'owner', [
+        { $project: { passwordHash: 0 } },
+      ]),
+    );
   }
 
   const projects = await Project.aggregate([

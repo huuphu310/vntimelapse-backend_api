@@ -8,10 +8,11 @@ const errorCodes = require('../errors/code');
 const { ROLE, VIDEO_STATUS } = require('../constants');
 
 const getVideos = async ({ cameraId, ...condition }, user) => {
-  const camera = await cameraDao.getCamera(cameraId);
+  const camera = await cameraDao.getCamera(cameraId, { lookupProject: true });
   if (
     !camera ||
-    (user.role === ROLE.OWNER && !user.projectIds.includes(camera.projectId))
+    (user.role === ROLE.OWNER &&
+      String(camera.project.ownerId) !== String(user._id))
   )
     throw new CustomError(errorCodes.CAMERA_NOT_FOUND);
 
@@ -26,7 +27,8 @@ const createVideo = async ({ cameraId, ...data }, user) => {
   const camera = await cameraDao.getCamera(cameraId, { lookupProject: true });
   if (
     !camera ||
-    (user.role === ROLE.OWNER && !user.projectIds.includes(camera.projectId))
+    (user.role === ROLE.OWNER &&
+      String(camera.project.ownerId) !== String(user._id))
   )
     throw new CustomError(errorCodes.CAMERA_NOT_FOUND);
 
@@ -36,7 +38,7 @@ const createVideo = async ({ cameraId, ...data }, user) => {
     endDate: moment().endOf('day'),
     status: { $in: [VIDEO_STATUS.PROCESSING, VIDEO_STATUS.DONE] },
   });
-  console.log(countVideos, camera.project.videosPerDay);
+
   if (countVideos >= camera.project.videosPerDay) {
     throw new CustomError(errorCodes.EXCEED_CREATE_VIDEO_PER_DAY);
   }

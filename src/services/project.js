@@ -9,8 +9,7 @@ const errorCodes = require('../errors/code');
 
 const getProjects = async (condition, user) => {
   const ownerCondition = {};
-  if (user?.role === ROLE.OWNER)
-    ownerCondition.ownerId = { $in: user.projectIds };
+  if (user?.role === ROLE.OWNER) ownerCondition.ownerId = user._id;
   const result = await projectDao.getProjects(
     {
       ...condition,
@@ -24,8 +23,7 @@ const getProjects = async (condition, user) => {
 
 const getProject = async (projectId, user) => {
   const ownerCondition = {};
-  if (user?.role === ROLE.OWNER)
-    ownerCondition.ownerId = { $in: user.projectIds };
+  if (user?.role === ROLE.OWNER) ownerCondition.ownerId = user._id;
   const project = await projectDao.getProject(
     {
       _id: projectId,

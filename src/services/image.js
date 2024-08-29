@@ -6,10 +6,11 @@ const errorCodes = require('../errors/code');
 const { ROLE } = require('../constants');
 
 const getImages = async ({ cameraId, ...condition }, user) => {
-  const camera = await cameraDao.getCamera(cameraId);
+  const camera = await cameraDao.getCamera(cameraId, { lookupProject: true });
   if (
     !camera ||
-    (user.role === ROLE.OWNER && !user.projectIds.includes(camera.projectId))
+    (user.role === ROLE.OWNER &&
+      String(camera.project.ownerId) !== String(user._id))
   )
     throw new CustomError(errorCodes.CAMERA_NOT_FOUND);
 

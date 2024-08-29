@@ -47,6 +47,7 @@ const getUsers = async ({
     { $match: match },
     { $sort: getSortQuery(sort) },
     { $skip: offset },
+    { $project: { passwordHash: 0 } },
     ...limitQuery,
   ]);
 

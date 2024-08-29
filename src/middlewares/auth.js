@@ -5,6 +5,7 @@ const authService = require('../services/auth');
 const userDao = require('../daos/user');
 
 const asyncMiddleware = require('./async');
+const { ROLE } = require('../constants');
 
 const auth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -18,12 +19,19 @@ const auth = async (req, res, next) => {
 
   const user = await userDao.findUser(userId);
   if (!user) throw new CustomError(codes.UNAUTHORIZED);
+  if (!user.active) throw new CustomError(codes.UNAUTHORIZED);
 
   req.userId = userId;
   req.user = user;
   return next();
 };
 
+const authorize = (req, res, next) => {
+  if (req.user.role === ROLE.OWNER) throw new CustomError(codes.FORBIDDEN);
+  return next();
+};
+
 module.exports = {
   auth: asyncMiddleware(auth),
+  authorize: asyncMiddleware(authorize),
 };
